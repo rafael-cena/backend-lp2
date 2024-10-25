@@ -1,4 +1,7 @@
 //É a classe responsável por traduzir requisições HTTP e produzir respostas HTTP
+/*
+    O cerebro da aplicação
+*/
 import Categoria from "../Modelo/categoria.js";
 import Produto from "../Modelo/produto.js";
 

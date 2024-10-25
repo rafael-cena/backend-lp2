@@ -78,6 +78,7 @@ export default class CategoriaDAO {
             );
             listaCategorias.push(categoria);
         }
+        await conexao.release();
         return listaCategorias;
     }
 }
