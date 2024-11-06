@@ -80,11 +80,8 @@ export default class ProdutoCtrl {
     }
 
     editar(requisicao, resposta) {
-        //preparar o destinatário que a resposta estará no formato JSON
         resposta.type("application/json");
-        //Verificando se o método da requisição é POST e conteúdo é JSON
-        if ((requisicao.method == 'PUT' || requisicao.method == 'PATCH') && requisicao.is("application/json")) {
-            //o código será extraída da URL (padrão REST)
+        if (requisicao.method == 'POST' && requisicao.is("application/json")) {
             const codigo = requisicao.params.codigo;
             const descricao = requisicao.body.descricao;
             const precoCusto = requisicao.body.precoCusto;
@@ -93,23 +90,16 @@ export default class ProdutoCtrl {
             const urlImagem = requisicao.body.urlImagem;
             const dataValidade = requisicao.body.dataValidade;
             const categoria = requisicao.body.categoria;
-
             const categ = new Categoria(categoria.codigo);
-            categ.consultar(categoria.codigo).then((lista) => {
-                if (lista.length > 0) {
-                    //pseudo validação
-                    if (codigo > 0 && descricao && precoCusto > 0 &&
-                        precoVenda > 0 && qtdEstoque >= 0 &&
-                        urlImagem && dataValidade && categoria.codigo > 0) {
-                        //alterar o produto
-                        const produto = new Produto(codigo,
-                            descricao, precoCusto, precoVenda,
-                            qtdEstoque, urlImagem, dataValidade, categ);
-                        produto.alterar()
+            categ.consultar(categoria.codigo).then((listaCategorias) => {
+                if (listaCategorias.length > 0) {
+                    if (codigo && descricao && precoCusto > 0 && precoVenda > 0 && qtdEstoque >= 0 && urlImagem && dataValidade && categoria.codigo > 0) {
+                        const produto = new Produto(codigo, descricao, precoCusto, precoVenda, qtdEstoque, urlImagem, dataValidade, categ);
+                        produto.editar()
                             .then(() => {
                                 resposta.status(200).json({
                                     "status": true,
-                                    "mensagem": "Produto alterado com sucesso!",
+                                    "mensagem": "Produto alterado com sucesso!"
                                 });
                             })
                             .catch((erro) => {
@@ -148,6 +138,7 @@ export default class ProdutoCtrl {
             });
 
         }
+
     }
 
     excluir(requisicao, resposta) {
