@@ -95,7 +95,7 @@ export default class ProdutoCtrl {
                 if (listaCategorias.length > 0) {
                     if (codigo && descricao && precoCusto > 0 && precoVenda > 0 && qtdEstoque >= 0 && urlImagem && dataValidade && categoria.codigo > 0) {
                         const produto = new Produto(codigo, descricao, precoCusto, precoVenda, qtdEstoque, urlImagem, dataValidade, categ);
-                        produto.editar()
+                        produto.alterar()
                             .then(() => {
                                 resposta.status(200).json({
                                     "status": true,
