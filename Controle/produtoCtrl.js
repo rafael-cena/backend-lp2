@@ -81,7 +81,7 @@ export default class ProdutoCtrl {
 
     editar(requisicao, resposta) {
         resposta.type("application/json");
-        if (requisicao.method == 'POST' && requisicao.is("application/json")) {
+        if ((requisicao.method == 'PATCH' || requisicao.method == 'PUT') && requisicao.is("application/json")) {
             const codigo = requisicao.params.codigo;
             const descricao = requisicao.body.descricao;
             const precoCusto = requisicao.body.precoCusto;
