@@ -1,4 +1,3 @@
-
 import Privilegio from "../Modelo/privilegio.js";
 
 export default class PrivilegioCtrl{
