@@ -1,6 +1,9 @@
 import Privilegio from "../Modelo/privilegio.js";
 import Usuario from "../Modelo/usuario.js";
 import conectar from "./Conexao.js";
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
 
 export default class UsuarioDAO {
     constructor() {
@@ -32,13 +35,14 @@ export default class UsuarioDAO {
 
     async incluir (usuario) {
         if (usuario instanceof Usuario) {
+            const senha = await bcrypt.hash(senha, saltRounds);
             const sql = `
                 INSERT INTO usuario (usuario, senha, nome, email, privilegio)
                 VALUES (?, ?, ?, ?, ?)
             `;
             let parametros = [
                 usuario.username,
-                usuario.senha,
+                senha,
                 usuario.nome,
                 usuario.email,
                 usuario.privilegio
