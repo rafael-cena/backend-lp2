@@ -61,7 +61,7 @@ export default class UsuarioCtrl {
     alterar(req, res) {
         res.type("application/json");
         if ((req.method == 'PATCH' || req.method == 'PUT') && req.is("application/json")) {
-            const id = req.params.id;
+            const id = req.params.codigo;
             const username = req.body.username;
             const senha = req.body.senha;
             const nome = req.body.nome;

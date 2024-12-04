@@ -72,7 +72,7 @@ export default class PrivilegioDAO {
         const [registros, campos] = await conexao.query(sql, parametros);
         let listaPrivilegios = [];
         for (const registro of registros) {
-            const privilegio = new privilegio(
+            const privilegio = new Privilegio(
                 registro['codigo'],
                 registro['descricao']
             );

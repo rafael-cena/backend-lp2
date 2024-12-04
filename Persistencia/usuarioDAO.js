@@ -35,9 +35,10 @@ export default class UsuarioDAO {
 
     async incluir (usuario) {
         if (usuario instanceof Usuario) {
-            const senha = await bcrypt.hash(senha, saltRounds);
+            const conexao = await conectar();
+            const senha = await bcrypt.hash(usuario.senha, saltRounds);
             const sql = `
-                INSERT INTO usuario (usuario, senha, nome, email, privilegio)
+                INSERT INTO usuario (username, senha, nome, email, privilegio)
                 VALUES (?, ?, ?, ?, ?)
             `;
             let parametros = [
@@ -45,7 +46,7 @@ export default class UsuarioDAO {
                 senha,
                 usuario.nome,
                 usuario.email,
-                usuario.privilegio
+                usuario.privilegio.codigo
             ];
 
             const resultado = await conexao.execute(sql, parametros);
@@ -67,15 +68,16 @@ export default class UsuarioDAO {
     async alterar(usuario) {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
-            const sql = `UPDATE usuario SET usuario=?, senha=?, nome=?, email=?, privilegio=?
+            const senha = await bcrypt.hash(usuario.senha, saltRounds);
+            const sql = `UPDATE usuario SET username=?, senha=?, nome=?, email=?, privilegio=?
                 WHERE id = ?
             `;
             let parametros = [
                 usuario.username,
-                usuario.senha,
+                senha,
                 usuario.nome,
                 usuario.email,
-                usuario.privilegio,
+                usuario.privilegio.codigo,
                 usuario.id
             ];
             await conexao.execute(sql, parametros);
