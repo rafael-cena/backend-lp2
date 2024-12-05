@@ -112,7 +112,7 @@ export default class UsuarioCtrl {
     excluir(req, res) {
         res.type("application/json");
         if (req.method === 'DELETE') {
-            const id = req.params.id;
+            const id = req.params.codigo;
 
             if (id) {
                 const usuario = new Usuario(id);
@@ -148,7 +148,7 @@ export default class UsuarioCtrl {
         res.type("application/json");
 
         if (req.method === 'GET') {
-            let id = req.params.id;
+            let id = req.params.codigo;
             if (isNaN(id)) id = "";
 
             const usuario = new Usuario();

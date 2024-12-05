@@ -33,7 +33,7 @@ export default class UsuarioDAO {
         }
     }
 
-    async incluir (usuario) {
+    async incluir(usuario) {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
             const senha = await bcrypt.hash(usuario.senha, saltRounds);
@@ -59,7 +59,7 @@ export default class UsuarioDAO {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
             const sql = `DELETE FROM usuario WHERE id = ?`;
-            let parametros = [ usuario.id ];
+            let parametros = [usuario.id];
             await conexao.execute(sql, parametros);
             await conexao.release();
         }
@@ -85,23 +85,12 @@ export default class UsuarioDAO {
         }
     }
 
-    async consultar (termo) {
+    async consultar(termo) {
         const conexao = await conectar();
-        let sql = "";
-        let parametros = [];
-        if (isNaN(parseInt(termo))) {
-            sql = `SELECT * FROM usuario u 
-                   INNER JOIN privilegio p ON u.privilegio = p.codigo
-                   WHERE u.username LIKE ?`;
-            parametros = ["%" + termo + "%"];
-        }
-        else {
-            sql = `SELECT * FROM usuario u 
-                   INNER JOIN privilegio p ON u.privilegio = p.codigo
-                   WHERE u.id = ?`;
-            parametros = [termo];
-        }
-        const [linhas, campos] = await conexao.execute(sql, parametros);
+        const sql = `SELECT c.*, u.*, p.* FROM cliente c
+                    LEFT JOIN usuario u ON c.usuario = u.id
+                    LEFT JOIN privilegio p ON u.privilegio = p.codigo`;
+        const [linhas, campos] = await conexao.execute(sql);
         let listaUsuarios = [];
         for (const linha of linhas) {
             const privilegio = new Privilegio(linha['codigo'], linha['descricao']);
@@ -119,7 +108,7 @@ export default class UsuarioDAO {
         return listaUsuarios;
     }
 
-    async autLogin (usuario) {
+    async autLogin(usuario) {
         if (usuario instanceof Usuario) {
             const conexao = await conectar();
             const sql = "SELECT * FROM usuario WHERE username = ?";
