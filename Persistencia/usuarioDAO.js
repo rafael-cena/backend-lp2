@@ -87,9 +87,9 @@ export default class UsuarioDAO {
 
     async consultar(termo) {
         const conexao = await conectar();
-        const sql = `SELECT c.*, u.*, p.* FROM cliente c
-                    LEFT JOIN usuario u ON c.usuario = u.id
-                    LEFT JOIN privilegio p ON u.privilegio = p.codigo`;
+        const sql = `SELECT * FROM usuario u
+                INNER JOIN privilegio p ON p.codigo = u.privilegio
+                ORDER BY u.username`;
         const [linhas, campos] = await conexao.execute(sql);
         let listaUsuarios = [];
         for (const linha of linhas) {

@@ -15,9 +15,8 @@ export default class ClienteCtrl {
 
             if (nome && cpf && cep && numero && telefone) {
                 let cliente;
-                if (usuario === undefined) cliente = new Cliente("", nome, cpf, cep, endereco, numero, telefone);
-                else cliente = new Cliente("", nome, cpf, cep, endereco, numero, telefone, new Usuario(usuario.id));
-
+                if (usuario === "") cliente = new Cliente("", nome, cpf, cep, endereco, numero, telefone);
+                else cliente = new Cliente("", nome, cpf, cep, endereco, numero, telefone, new Usuario(0, usuario));
                 cliente.incluir().then(() => {
                     res.status(200).json({
                         "status": true,

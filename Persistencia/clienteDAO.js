@@ -33,6 +33,28 @@ export default class ClienteDAO {
         }
     }
 
+    async getId(username) {
+        const conexao = await conectar();
+        const sql = "SELECT * FROM usuario WHERE username = ?";
+        const parametros = [username];
+        const [linhas, campos] = await conexao.execute(sql, parametros);
+        let listaClientes = [];
+        for (const linha of linhas) {
+            const privilegio = new Privilegio(linha['codigo'], linha['descricao']);
+            const usuario = new Usuario(
+                linha['id'],
+                linha['username'],
+                linha['senha'],
+                linha['nome'],
+                linha['email'],
+                privilegio
+            );
+            listaClientes.push(usuario);
+        }
+        await conexao.release();
+        return listaClientes;
+    }
+
     async incluir(cliente) {
         if (cliente instanceof Cliente) {
             const conexao = await conectar();
